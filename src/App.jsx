@@ -1,34 +1,49 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+// UVTChatbot.jsx
+import React, { useState, useEffect } from 'react';
+import './index.css';
 
-function App() {
-  const [count, setCount] = useState(0)
+const UVTChatbot = () => {
+  const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState('');
+
+  const handleInputChange = (e) => {
+    setInput(e.target.value);
+  };
+
+  const handleSendMessage = () => {
+    if (input.trim() === '') return;
+
+    setMessages([...messages, { text: input, sender: 'user' }]);
+    setInput('');
+    // You can send the user's message to your backend or process it with GPT here
+  };
+
+  useEffect(() => {
+    // Simulate a response from the chatbot (you would replace this with GPT responses)
+    const botResponse = { text: 'Hello! How can I help you today?', sender: 'bot' };
+    setMessages([...messages, botResponse]);
+  }, []);
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="uvt-chatbot-container">
+      <div className="uvt-chat-messages">
+        {messages.map((message, index) => (
+          <div key={index} className={`uvt-message ${message.sender}`}>
+            {message.text}
+          </div>
+        ))}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+      <div className="uvt-chat-input">
+        <input
+          type="text"
+          placeholder="Type your message..."
+          value={input}
+          onChange={handleInputChange}
+        />
+        <button onClick={handleSendMessage}>Send</button>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default UVTChatbot;
